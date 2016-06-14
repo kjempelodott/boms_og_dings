@@ -3,8 +3,8 @@
 "xbacklight -10"
   XF86MonBrightnessDown
 "amixer set Master 5%+"
-  XF8AudioRaiseVolume
+  XF86AudioRaiseVolume
 "amixer set Master 5%-"
-  XF8AudioLowerVolume
+  XF86AudioLowerVolume
 "amixer set Master mute"
-  XF8AudioMute
+  XF86AudioMute
