@@ -6,7 +6,7 @@ batfull=`cat $bat_dir/energy_full`
 while true; do
 
     # Date and time
-    date_str=`date "+%A %d. %B %H:%M")`
+    date_str=`date "+%A %d. %B %H:%M"`
     # Memory
     mem_str=`free | sed -n 2p | awk '{ printf "%d.2%s", 100*$3/$2, "%" }'`
     mem_str="[MEM] $mem_str"
@@ -22,21 +22,20 @@ while true; do
 
     xsetroot -name "$net_str$bat_str -- $mem_str -- $date_str"
     sleep 10s
-    
 done&
 
-xss-lock slock &
-xautolock -time 5 -locker slock &
+hsetroot -full ~/suckless.org/bkg.png
 recent=~/.config/spotify/Users/kjempelodott-user/recently_played.bnk
+font=/usr/share/texmf/fonts/opentype/public/tex-gyre/texgyreadventor-regular.otf
+
+img_orig=$(mktemp)
+img=$(mktemp)
+last=
+last_thumb=
 
 while true; do
-    img_orig=$(mktemp)
-    img=$(mktemp)
-    last=
-    last_thumb=
-    pgrep spotify 2>&1 >/dev/null
-    while [ $? -eq 0 ]
-    do
+    if pgrep spotify 2>&1 >/dev/null
+    then
 	cur=$(strings -20 $recent | grep track | head -1)
 	if [[ "$cur" != "$last" ]]
 	then
@@ -46,18 +45,21 @@ while true; do
 	    if [[ "$thumb" != "$last_thumb" ]]
 	    then
 		curl -X GET "$thumb" 2>/dev/null > $img_orig
-		last_thumb=thumb
+		last_thumb=$thumb
 	    fi
 	    title=$(echo $json | jq -r '.title')
-	    convert $img_orig -bordercolor Black -border 400x60 $img
-	    convert $img -gravity south -pointsize 30 -fill White -annotate 0 "$title" $img
+	    convert $img_orig -brightness-contrast -20x-20 $img
+	    convert +append $img $img_orig $img $img
+	    convert $img -bordercolor Black -border 0x100 $img
+	    convert $img -gravity south -font $font -pointsize 50 -fill White -annotate 0 "$title" $img
 	    hsetroot -center $img
-	    last=cur
+	    last=$cur
 	fi
 	sleep 5
-    done
+    fi
     sleep 10
 done&
 
-#hsetroot -full ~/suckless.org/bkg.png
+xss-lock slock &
+xautolock -time 5 -locker slock &
 exec dwm
