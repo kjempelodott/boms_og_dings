@@ -25,6 +25,8 @@ for i in groups:
         Key([mod, "shift"], i.name, lazy.window.togroup(i.name)),
     ])
 
+groups[2].matches = [Match(wm_class=["Inkscape", "GIMP"])]
+groups[4].matches = [Match(wm_class=["Wireshark"])]
 groups[8].matches = [Match(wm_class=["Firefox"])]
     
 layouts = [
@@ -32,24 +34,40 @@ layouts = [
     layout.Stack(num_stacks=2)
 ]
 
-widget_defaults = dict(
-    font='DejaVu Sans Mono',
-    fontsize=16,
+defaults = dict(
+    font='DeJaVu Sans Mono',
+    fontsize=30,
+    background='c3c3c3',
+    foreground='000000',
 )
 
-extension_defaults = widget_defaults.copy()
+insane_defaults = defaults.copy()
+insane_defaults['background'] = 'ffff00'
 
 screens = [
     Screen(
         bottom=bar.Bar(
             [
-                widget.GroupBox(),
-                widget.Prompt(),
-                widget.WindowName(),
-                widget.Systray(),
-                widget.Clock(format='%Y-%m-%d %a %H:%M'),
+                widget.Image(filename='~/.config/qtile/start.png'),
+                widget.GroupBox(
+                    active='000000',
+                    borderwidth=0,
+                    inactive='707070',
+                    rounded=False,
+                    padding=6,
+                    highlight_method='line',
+                    highlight_color=['ff0000', '00ff00'],
+                    **defaults
+                ),
+                widget.Prompt(
+                    prompt='>',
+                    cursor_color='dd4400',
+                    **insane_defaults
+                ),
+                widget.TextBox(width=bar.STRETCH, **defaults),
+                widget.Clock(format='%Y-%m-%d %a %H:%M', **defaults),
             ],
-            30,
+            48,
         ),
     ),
 ]
