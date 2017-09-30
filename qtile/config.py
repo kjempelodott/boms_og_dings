@@ -3,31 +3,40 @@ from libqtile.config import Key, Screen, Group, Match, Drag
 from libqtile.command import lazy
 from libqtile import layout, bar, widget, hook
 
-mod = "mod4"
+theme = 'dark'
+
+mod = 'mod4'
 
 keys = [
-    Key([mod], "Return", lazy.spawn("xterm")),
-    Key([mod], "Tab", lazy.next_layout()),
-    Key([mod], "p", lazy.spawncmd()),
-    Key([mod, "shift"], "Tab", lazy.layout.flip()),
-    Key([mod], "w", lazy.window.kill()),
-    Key([mod, "shift"], "q", lazy.shutdown()),
+    Key([mod], 'Return', lazy.spawn('xterm tmux')),
+    Key([mod], 'Tab', lazy.next_layout()),
+    Key([mod], 'p', lazy.spawncmd()),
+    Key([mod, 'shift'], 'Tab', lazy.layout.flip()),
+    Key([mod], 'w', lazy.window.kill()),
+    Key([mod, 'shift'], 'q', lazy.shutdown()),
 ]
 
-groups = [Group(str(i)) for i in range(1, 10)]
+_groups = {
+    '1' : None,
+    '2' : None,
+    '3' : [Match(wm_class=['Inkscape', 'Gimp'])],
+    '4' : None,
+    '5' : [Match(wm_class=['Wireshark'])],
+    '6' : None,
+    '7' : None,
+    '8' : None,
+    '9' : [Match(wm_class=['Firefox'])]
+}
 
-for i in groups:
+groups = []
+for label, matches in sorted(_groups.items()):
+    groups.append(Group(label, matches=matches))
     keys.extend([
         # mod1 + letter of group = switch to group
-        Key([mod], i.name, lazy.group[i.name].toscreen()),
-        
+        Key([mod], label, lazy.group[label].toscreen()),
         # mod1 + shift + letter of group = switch to & move focused window to group
-        Key([mod, "shift"], i.name, lazy.window.togroup(i.name)),
+        Key([mod, 'shift'], label, lazy.window.togroup(label)),
     ])
-
-groups[2].matches = [Match(wm_class=["Inkscape", "GIMP"])]
-groups[4].matches = [Match(wm_class=["Wireshark"])]
-groups[8].matches = [Match(wm_class=["Firefox"])]
     
 layouts = [
     layout.Max(),
@@ -35,37 +44,46 @@ layouts = [
 ]
 
 defaults = dict(
-    font='DeJaVu Sans Mono',
-    fontsize=30,
-    background='c3c3c3',
-    foreground='000000',
+    padding=8
 )
 
-insane_defaults = defaults.copy()
-insane_defaults['background'] = 'ffff00'
+button = 'start.png'
+
+if theme == 'light':
+    defaults.update(dict(
+        background='c3c3c3',
+        foreground='000000',
+    ))
+elif theme == 'dark':
+    button = 'start_inv.png'
+    defaults.update(dict(
+        background='3c3c3c',
+        foreground='ff8800',
+    ))
 
 screens = [
     Screen(
         bottom=bar.Bar(
             [
-                widget.Image(filename='~/.config/qtile/start.png'),
-                widget.GroupBox(
-                    active='000000',
-                    borderwidth=0,
-                    inactive='707070',
-                    rounded=False,
-                    padding=6,
-                    highlight_method='line',
-                    highlight_color=['ff0000', '00ff00'],
+                widget.Image(filename='~/.config/qtile/' + button),
+                widget.Prompt(
+                    prompt='> ',
+                    font='FreeMono',
+                    fontsize=24,
+                    cursor_color='dddd00',
                     **defaults
                 ),
-                widget.Prompt(
-                    prompt='>',
-                    cursor_color='dd4400',
-                    **insane_defaults
+                widget.WindowName(
+                    font='FreeMono Oblique',
+                    fontsize=22,
+                    **defaults
                 ),
-                widget.TextBox(width=bar.STRETCH, **defaults),
-                widget.Clock(format='%Y-%m-%d %a %H:%M', **defaults),
+                widget.Clock(
+                    format='%H:%M',
+                    font='FreeMono',
+                    fontsize=26,
+                    **defaults
+                ),
             ],
             48,
         ),
@@ -74,9 +92,9 @@ screens = [
 
 # Drag floating layouts.
 mouse = [
-    Drag([mod], "Button1", lazy.window.set_position_floating(),
+    Drag([mod], 'Button1', lazy.window.set_position_floating(),
          start=lazy.window.get_position()),
-    Drag([mod], "Button3", lazy.window.set_size_floating(),
+    Drag([mod], 'Button3', lazy.window.set_size_floating(),
          start=lazy.window.get_size()),
 ]
 
@@ -89,11 +107,11 @@ def run(cmd):
 @hook.subscribe.startup
 def startup():
     run('firefox')
-    run('xterm')
+    run('xterm tmux')
     
 main = None
 follow_mouse_focus = False
 bring_front_click = False
 cursor_warp = False
 auto_fullscreen = True
-focus_on_window_activation = "smart"
+focus_on_window_activation = 'smart'
