@@ -3,8 +3,6 @@ from libqtile.config import Key, Screen, Group, Match, Drag
 from libqtile.command import lazy
 from libqtile import layout, bar, widget, hook
 
-theme = 'dark'
-
 mod = 'mod4'
 
 keys = [
@@ -44,48 +42,40 @@ layouts = [
 ]
 
 defaults = dict(
-    padding=8
+    padding=8,
+    fontsize=16,
+    background='202020',
+    foreground='ff8800',
 )
-
-button = 'start.png'
-
-if theme == 'light':
-    defaults.update(dict(
-        background='c3c3c3',
-        foreground='000000',
-    ))
-elif theme == 'dark':
-    button = 'start_inv.png'
-    defaults.update(dict(
-        background='3c3c3c',
-        foreground='ff8800',
-    ))
 
 screens = [
     Screen(
         bottom=bar.Bar(
             [
-                widget.Image(filename='~/.config/qtile/' + button),
+                widget.GroupBox(
+                    font='FreeSans',
+                    borderwidth=0,
+                    center_aligned=True,
+                    inactive='888888',
+                    **defaults
+                ),
                 widget.Prompt(
                     prompt='> ',
-                    font='FreeMono',
-                    fontsize=24,
+                    font='FreeSans',
                     cursor_color='dddd00',
                     **defaults
                 ),
                 widget.WindowName(
-                    font='FreeMono Oblique',
-                    fontsize=22,
+                    font='FreeSans Italic',
                     **defaults
                 ),
                 widget.Clock(
                     format='%H:%M',
-                    font='FreeMono',
-                    fontsize=26,
+                    font='FreeSans',
                     **defaults
                 ),
             ],
-            48,
+            24
         ),
     ),
 ]
