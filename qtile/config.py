@@ -45,7 +45,6 @@ defaults = dict(
     padding=8,
     fontsize=16,
     background='202020',
-    foreground='ff8800',
 )
 
 screens = [
@@ -53,25 +52,28 @@ screens = [
         bottom=bar.Bar(
             [
                 widget.GroupBox(
-                    font='FreeSans',
                     borderwidth=0,
                     center_aligned=True,
+                    font='FreeSans',
                     inactive='888888',
                     **defaults
                 ),
                 widget.Prompt(
-                    prompt='> ',
-                    font='FreeSans',
+                    prompt='$ ',
+                    foreground='ddaaaa',
+                    font='FreeSans Mono',
                     cursor_color='dddd00',
                     **defaults
                 ),
                 widget.WindowName(
-                    font='FreeSans Italic',
+                    foreground='ffeecc',
+                    font='FreeSans',
                     **defaults
                 ),
                 widget.Clock(
-                    format='%H:%M',
+                    foreground='ffeecc',
                     font='FreeSans',
+                    format='%H:%M',
                     **defaults
                 ),
             ],
