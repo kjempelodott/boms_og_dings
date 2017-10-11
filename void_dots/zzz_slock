@@ -1,0 +1,5 @@
+USER=lodott
+export XAUTHORITY=/home/$USER/.Xauthority
+export DISPLAY=`su $USER -c 'echo $DISPLAY'`
+su $USER -c '/usr/bin/slock' &
+sleep 1
