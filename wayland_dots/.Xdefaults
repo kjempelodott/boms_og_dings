@@ -1,0 +1,6 @@
+xterm*font:"DejaVu Sans Mono"
+XTerm*eightBitInput:false
+Xterm*eightBitOutput:true
+xterm*colors:256
+XTerm*internalBorder:0
+xterm*background:#303030
