@@ -1,6 +1,0 @@
-"sudo intel_backlight incr 5"
-    m:0x0 + c:75
-    F9
-"sudo intel_backlight decr 5"
-    m:0x0 + c:74
-    F8

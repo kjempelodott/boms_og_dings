@@ -1,5 +1,0 @@
-#include "/home/lodott/git/solarized/xresources/Xresources.light"
-xterm*termName: xterm-256color
-XTerm*faceName: FreeMono
-XTerm*faceSize: 14
-XTerm*metaSendsEscape: true
