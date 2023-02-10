@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # _*_ coding: utf-8 _*_
 
+import os
 from i3ipc import Connection, Event
 
 max_length = 30
-i3 = Connection()
+i3 = Connection(os.environ.get('SWAYSOCK'), auto_reconnect=True)
 
 def assign_generic_name(i3, e):
     if not e.change == 'rename':

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TIME=`date +'%H:%M:%S'`
-BATUSE=`acpi -b | awk -F', ' '{ print $2 }'`
+BATUSE=`acpi -b | awk -F', ' 'NR==1{ print $2 }'`
 TEMP=`acpi -t | awk '{ print $4 }'`
 COL='\033[0;31m'
 RESET='\033[0m'

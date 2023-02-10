@@ -1,17 +1,22 @@
 input * xkb_layout "no"
 
-seat seat0 xcursor_theme crystalgreen 48
+seat seat0 xcursor_theme Breeze_Red 16
 
 set $mod Mod4
 set $lock swaylock -f -c 000000
-set $term xterm -fa 'Monospace' -fs 11 -e bash -c 'tmux -2'
-set $menu dmenu_path | dmenu -fn 'DejaVu Sans Mono 10' | xargs swaymsg exec --
+set $term st -f 'DejaVu Sans Mono:pixelsize=15' -e /bin/bash -c 'tmux -2'
+set $menu dmenu_path | dmenu -fn 'DejaVu Sans Mono:pixelsize=18' | xargs swaymsg exec --
+
+bindcode 74 exec xbacklight -dec 5
+bindcode 75 exec xbacklight -inc 5
 
 bindsym $mod+Return exec $term
 bindsym $mod+d exec $menu
 bindsym $mod+Shift+q exec swaymsg exit
 bindsym $mod+l exec $lock
-bindsym $mod+f fullscreen
+bindsym $mod+m fullscreen
+bindsym $mod+f floating toggle
+bindsym $mod+space layout toggle
 
 bindsym $mod+1 workspace number 1
 bindsym $mod+2 workspace number 2
@@ -34,26 +39,31 @@ bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 
 default_border none
+floating_modifier $mod normal
 
+exec_always ~/.config/sway/xdg.sh &
 exec_always ~/.config/sway/wsnames.py &
 exec swayidle -w \
-     timeout 300 $lock \
-     before-sleep $lock
+     timeout 1800 '$lock' \
+     before-sleep '$lock'
+
+output eDP-1 background ~/.config/sway/background.jpg fill
 
 bar {
 	position top
-	status_command while ~/.config/sway/status.sh; do sleep .1; done
+	status_command while ~/.config/sway/status.sh; do sleep 1; done
 	colors {
 		statusline #b4d171
 		background #1d1d1d
 		inactive_workspace #1d1d1d #1d1d1d #3d3d3d
 		focused_workspace #1d1d1d #1d1d1d #b4d171
 	}
-    font pango:Monospace 11
+    font pango:DejaVu Sans Mono 13
     pango_markup enabled
 }
 
 input "2:7:SynPS/2_Synaptics_TouchPad" {
+    middle_emulation disabled
     tap enabled
     pointer_accel 0.4
 }
