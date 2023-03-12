@@ -11,13 +11,16 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(inhibit-startup-screen t)
- '(package-selected-packages '(rust-mode editorconfig json-reformat json-mode)))
+ '(package-selected-packages '(web-mode rust-mode editorconfig json-reformat))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
+(add-to-list 'auto-mode-alist '("\\.svelte\\'" . web-mode))
 
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
