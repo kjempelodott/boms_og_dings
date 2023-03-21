@@ -7,38 +7,37 @@ from i3ipc import Connection, Event
 max_length = 30
 i3 = Connection(os.environ.get('SWAYSOCK'), auto_reconnect=True)
 
-def assign_generic_name(i3, e):
+def rename(con, e):
+    ws = con.workspace()
+    name = con.name if len(con.name) <= max_length else con.name[:max_length - 1] + '…'
+    name = f'{ws.num}: {name}'
+    if name == ws.name:
+        return
+    command = 'rename workspace "{}" to "{}"'.format(ws.name.replace('"', '\\"'),
+                                                     name.replace('"', '\\"'))
+    i3.command(command)
+
+def assign_name(i3, e):
     if not e.change == 'rename':
         try:
             con = i3.get_tree().find_focused()
             if not con.type == 'workspace':
-                if not e.change == 'new':
-                    ws_old_name = con.workspace().name
-                    ws_name = "%s: %s" % (con.workspace().num, con.name)
-                    name = ws_name if len(ws_name) <= max_length else ws_name[:max_length - 1] + "…"
-                    i3.command('rename workspace "%s" to %s' % (ws_old_name, name))
-                else:
+                if e.change in ('focus', 'title'):
+                    rename(con, e)
+                elif e.change == 'new':
                     con = i3.get_tree().find_by_id(e.container.id)
-                    ws_num = con.workspace().num
-                    w_name = con.name if con.name else ''
-                    if w_name and ws_num:
-                        name = "%s: %s" % (ws_num, w_name)
-                        i3.command('rename workspace "%s" to %s' % (ws_num, name))
-            else:
-                ws_num = con.workspace().num
-                ws_new_name = "%s:" % ws_num
-                i3.command('rename workspace to "{}"'.format(ws_new_name))
+                    rename(con, e)
         except Exception as ex:
             exit(ex)
 
 def main():
     # Subscribe to events
-    i3.on(Event.WORKSPACE_FOCUS, assign_generic_name)
-    i3.on(Event.WINDOW_FOCUS, assign_generic_name)
-    i3.on(Event.WINDOW_TITLE, assign_generic_name)
-    i3.on(Event.WINDOW_CLOSE, assign_generic_name)
-    i3.on(Event.WINDOW_NEW, assign_generic_name)
-    i3.on(Event.BINDING, assign_generic_name)
+    i3.on(Event.WORKSPACE_FOCUS, assign_name)
+    i3.on(Event.WINDOW_FOCUS, assign_name)
+    i3.on(Event.WINDOW_TITLE, assign_name)
+    i3.on(Event.WINDOW_CLOSE, assign_name)
+    i3.on(Event.WINDOW_NEW, assign_name)
+    i3.on(Event.BINDING, assign_name)
     i3.main()
 
 if __name__ == "__main__":
