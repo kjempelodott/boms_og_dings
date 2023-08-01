@@ -13,8 +13,8 @@ def rename(con, e):
     name = f'{ws.num}: {name}'
     if name == ws.name:
         return
-    command = 'rename workspace "{}" to "{}"'.format(ws.name.replace('"', '\\"'),
-                                                     name.replace('"', '\\"'))
+    command = 'rename workspace "{}" to "{}"'.format(ws.name.replace('"', '\"'),
+                                                     name.replace('"', '\"'))
     i3.command(command)
 
 def assign_name(i3, e):
