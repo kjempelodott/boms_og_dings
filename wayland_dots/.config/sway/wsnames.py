@@ -10,23 +10,24 @@ i3 = Connection(os.environ.get('SWAYSOCK'), auto_reconnect=True)
 def rename(con, e):
     ws = con.workspace()
     name = con.name if len(con.name) <= max_length else con.name[:max_length - 1] + '…'
-    name = f'{ws.num}: {name}'
     if name == ws.name:
         return
-    command = 'rename workspace "{}" to "{}"'.format(ws.name.replace('"', '\"'),
-                                                     name.replace('"', '\"'))
-    i3.command(command)
+    name = f'{ws.num}: {name}'
+    command = 'rename workspace "{}" to "{}"'.format(ws.name.replace("'", "\'"),
+                                                     name.replace("'", "\'"))
+    res = i3.command(command)
 
 def assign_name(i3, e):
     if not e.change == 'rename':
         try:
             con = i3.get_tree().find_focused()
-            if not con.type == 'workspace':
-                if e.change in ('focus', 'title'):
-                    rename(con, e)
-                elif e.change == 'new':
-                    con = i3.get_tree().find_by_id(e.container.id)
-                    rename(con, e)
+            if type(con) is None:
+                return
+            if e.change in ('focus', 'title'):
+                rename(con, e)
+            elif e.change == 'new':
+                con = i3.get_tree().find_by_id(e.container.id)
+                rename(con, e)
         except Exception as ex:
             exit(ex)
 
