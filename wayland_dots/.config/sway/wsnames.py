@@ -21,7 +21,7 @@ def assign_name(i3, e):
     if not e.change == 'rename':
         try:
             con = i3.get_tree().find_focused()
-            if type(con) is None:
+            if con is None:
                 return
             if e.change in ('focus', 'title'):
                 rename(con, e)
