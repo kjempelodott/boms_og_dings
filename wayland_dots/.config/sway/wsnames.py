@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # _*_ coding: utf-8 _*_
 
-import os
+import os, re
 from i3ipc import Connection, Event
 
 max_length = 30
 i3 = Connection(os.environ.get('SWAYSOCK'), auto_reconnect=True)
+repl = re.compile(r'([\'\"])')
 
 def rename(con, e):
     ws = con.workspace()
@@ -13,8 +14,7 @@ def rename(con, e):
     if name == ws.name:
         return
     name = f'{ws.num}: {name}'
-    command = 'rename workspace "{}" to "{}"'.format(ws.name.replace("'", "\'"),
-                                                     name.replace("'", "\'"))
+    command = 'rename workspace "{}" to "{}"'.format(repl.sub(r'\1', ws.name), repl.sub(r'\1', name))
     res = i3.command(command)
 
 def assign_name(i3, e):
