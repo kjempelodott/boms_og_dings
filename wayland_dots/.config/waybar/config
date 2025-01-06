@@ -1,0 +1,145 @@
+{
+	"layer": "top",
+	"position": "top",
+
+	"modules-left": [
+		"sway/mode",
+		"sway/workspaces",
+		"custom/arrow7",
+		"sway/window"
+	],
+
+	"modules-right": [
+		"tray",
+		"custom/arrow6",
+		"network",
+		"custom/arrow5",
+		"battery",
+		"custom/arrow4",
+		"cpu",
+		"custom/arrow3",
+		"temperature",
+		"custom/arrow2",
+		"clock#date",
+		"custom/arrow1",
+		"clock#time"
+	],
+
+	// Modules
+ 	"clock#time": {
+		"interval": 5,
+		"format": "{:L%H:%M}",
+		"tooltip": false,
+	},
+
+	"clock#date": {
+		"interval": 60,
+		"format": "{:L%e %b %Y}",
+		"tooltip": false
+	},
+
+	"cpu": {
+		"interval": 5,
+		"tooltip": false,
+		"format": "  {usage}%",
+		"format-alt": "  {load}",
+		"states": {
+			"warning": 70,
+			"critical": 90
+		}
+	},
+
+    "battery": {
+  	    "interval": 60,
+  	    "states": {
+  		    "warning": 30,
+  		    "critical": 15
+  	    },
+  	    "format": "{capacity}% {icon}",
+  	    "format-icons": [" ", " ", " ", " ", " "],
+  	    "max-length": 25
+    },
+
+	"network": {
+		"interval": 5,
+		"format-wifi": "  {essid} ({signalStrength}%)",
+		"format-ethernet": "󰈀  {ifname}",
+		"format-disconnected": "  No connection",
+		"format-disabled": "󰀞  Disabled",
+		"format-alt": "{ipaddr}/{cidr}",
+		"tooltip": false
+	},
+
+	"sway/mode": {
+		"format": "{}",
+		"tooltip": false
+	},
+
+	"sway/window": {
+		"format": "{}",
+		"max-length": 30,
+		"tooltip": false
+	},
+
+	"sway/workspaces": {
+		"disable-scroll-wraparound": true,
+		"smooth-scrolling-threshold": 4,
+		"enable-bar-scroll": true,
+		"format": "{name}"
+	},
+
+	"temperature": {
+		"hwmon-path": "/sys/class/hwmon/hwmon1/temp1_input",
+		"critical-threshold": 90,
+		"interval": 5,
+		"format": "{icon} {temperatureC}°",
+		"format-icons": [
+			"",
+			"",
+			"",
+			"",
+			""
+		],
+		"tooltip": false
+	},
+
+	"tray": {
+		"icon-size": 18
+		//"spacing": 10
+	},
+
+	"custom/arrow1": {
+		"format": "",
+		"tooltip": false
+	},
+
+	"custom/arrow2": {
+		"format": "",
+		"tooltip": false
+	},
+
+	"custom/arrow3": {
+		"format": "",
+		"tooltip": false
+	},
+
+	"custom/arrow4": {
+		"format": "",
+		"tooltip": false
+	},
+
+	"custom/arrow5": {
+		"format": "",
+		"tooltip": false
+	},
+
+	"custom/arrow6": {
+		"format": "",
+		"tooltip": false
+	},
+
+	"custom/arrow7": {
+		"format": "",
+		"tooltip": false
+	}
+}

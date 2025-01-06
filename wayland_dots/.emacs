@@ -11,8 +11,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(inhibit-startup-screen t)
- '(package-selected-packages '(web-mode rust-mode editorconfig json-reformat))
-)
+ '(package-selected-packages '(web-mode rust-mode editorconfig json-reformat)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -34,7 +33,7 @@
   kept-old-versions 1    ; and how many of the old
 )
 
-(load-theme 'misterioso)
+(load-theme 'tango)
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))

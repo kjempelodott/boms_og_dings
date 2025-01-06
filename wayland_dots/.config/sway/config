@@ -1,69 +1,125 @@
-input * xkb_layout "no"
-
-seat seat0 xcursor_theme Breeze_Red 16
-
-set $mod Mod4
-set $lock swaylock -f -c 000000
-set $term st -f 'DejaVu Sans Mono:pixelsize=15' -e /bin/bash -c 'tmux -2'
-set $menu dmenu_path | dmenu -fn 'DejaVu Sans Mono:pixelsize=18' | xargs swaymsg exec --
-
-bindcode 74 exec xbacklight -dec 5
-bindcode 75 exec xbacklight -inc 5
-
-bindsym $mod+Return exec $term
-bindsym $mod+d exec $menu
-bindsym $mod+Shift+q exec swaymsg exit
-bindsym $mod+l exec $lock
-bindsym $mod+m fullscreen
-bindsym $mod+f floating toggle
-bindsym $mod+space layout toggle
-
-bindsym $mod+1 workspace number 1
-bindsym $mod+2 workspace number 2
-bindsym $mod+3 workspace number 3
-bindsym $mod+4 workspace number 4
-bindsym $mod+5 workspace number 5
-bindsym $mod+6 workspace number 6
-bindsym $mod+7 workspace number 7
-bindsym $mod+8 workspace number 8
-bindsym $mod+9 workspace number 9
-
-bindsym $mod+Shift+1 move container to workspace number 1
-bindsym $mod+Shift+2 move container to workspace number 2
-bindsym $mod+Shift+3 move container to workspace number 3
-bindsym $mod+Shift+4 move container to workspace number 4
-bindsym $mod+Shift+5 move container to workspace number 5
-bindsym $mod+Shift+6 move container to workspace number 6
-bindsym $mod+Shift+7 move container to workspace number 7
-bindsym $mod+Shift+8 move container to workspace number 8
-bindsym $mod+Shift+9 move container to workspace number 9
-
-default_border none
-floating_modifier $mod normal
-
-exec_always ~/.config/sway/xdg.sh &
-exec_always nice -n 19 ~/.config/sway/wsnames.py &
-exec swayidle -w \
-     timeout 1800 '$lock' \
-     before-sleep '$lock'
-
-output eDP-1 background ~/.config/sway/background.jpg fill
-
-bar {
-	position top
-	status_command while ~/.config/sway/status.sh; do sleep 1; done
-	colors {
-		statusline #b4d171
-		background #1d1d1d
-		inactive_workspace #1d1d1d #1d1d1d #3d3d3d
-		focused_workspace #1d1d1d #1d1d1d #b4d171
-	}
-    font pango:DejaVu Sans Mono 13
-    pango_markup enabled
+output * {
+  scale 1
+  background ~/.config/sway/lava.jpg fill
 }
 
-input "2:7:SynPS/2_Synaptics_TouchPad" {
-    middle_emulation disabled
-    tap enabled
-    pointer_accel 0.4
+input type:keyboard {
+  xkb_layout "no"
+}
+
+input type:touchpad {
+  accel_profile adaptive
+  click_method clickfinger
+  drag enabled
+  dwt enabled
+  middle_emulation enabled
+  pointer_accel 0.2
+  scroll_method two_finger
+  tap enabled
+}
+
+seat seat0 {
+  xcursor_theme Adwaita 24
+}
+
+set {
+  $black #282828
+  $green #689d6a
+  $white #ebdbb2
+  $red #fb4934
+  $yellow #fabd2f
+  $orange #d75f00
+}
+
+set {
+  $mod Mod4
+  $lock swaylock -f -F -e -i ~/.config/sway/lava.jpg --font "Noto Sans" --font-size 24 \
+        --indicator-radius 100 \
+        --indicator-thickness 20 \
+        --key-hl-color "$green"90 \
+        --bs-hl-color "$red"90 \
+        --ring-color "$black"90 \
+        --inside-color "$black"90 \
+        --text-color "$white" \
+        --ring-ver-color "$black"90 \
+        --inside-ver-color "$black"90 \
+        --text-ver-color "$white" \
+        --ring-clear-color "$green"90 \
+        --inside-clear-color "$green"90 \
+        --text-clear-color "$white" \
+        --ring-wrong-color "$red"90 \
+        --inside-wrong-color "$red"90 \
+        --text-wrong-color "$white" \
+        --line-color "$black"00 \
+        --line-ver-color "$black"00 \
+        --line-clear-color "$black"00 \
+        --line-wrong-color "$black"00 \
+        --separator-color "$black"00
+
+  $term alacritty -o font.size=12 -e /usr/bin/zsh -c 'tmux -2'
+  $menu bemenu-run -n --fn "Noto Sans Mono 11" \
+    --tb "$black" \
+    --fb "$black" \
+    --tf "$yellow" \
+    --hf "$yellow" \
+    --nf "$red" \
+    --af "$white" | xargs swaymsg exec --
+}
+
+
+client.focused $orange $black $yellow $black $orange
+client.unfocused $black $black $white $black $black
+
+smart_gaps on
+
+bindsym {
+  $mod+Return exec $term
+  $mod+d exec $menu
+  $mod+Shift+q exec swaymsg exit
+  $mod+l exec $lock
+  $mod+m fullscreen
+  $mod+f floating toggle
+  $mod+space layout toggle all
+  $mod+r reload
+
+  $mod+1 workspace number 1
+  $mod+2 workspace number 2
+  $mod+3 workspace number 3
+  $mod+4 workspace number 4
+  $mod+5 workspace number 5
+  $mod+6 workspace number 6
+  $mod+7 workspace number 7
+  $mod+8 workspace number 8
+  $mod+9 workspace number 9
+
+  $mod+Shift+s sticky toggle
+  $mod+Left focus prev
+  $mod+Right focus next
+
+  $mod+Shift+1 move container to workspace number 1
+  $mod+Shift+2 move container to workspace number 2
+  $mod+Shift+3 move container to workspace number 3
+  $mod+Shift+4 move container to workspace number 4
+  $mod+Shift+5 move container to workspace number 5
+  $mod+Shift+6 move container to workspace number 6
+  $mod+Shift+7 move container to workspace number 7
+  $mod+Shift+8 move container to workspace number 8
+  $mod+Shift+9 move container to workspace number 9
+
+  XF86MonBrightnessDown exec brightnessctl s 5%-
+  XF86MonBrightnessUp exec brightnessctl s +5%
+}
+
+smart_borders on
+default_border pixel 1
+floating_modifier $mod normal
+
+exec swayidle -w \
+  timeout 600 '$lock' \
+  before-sleep '$lock'
+
+bar {
+  swaybar_command waybar
+  position top
+  mode dock
 }
